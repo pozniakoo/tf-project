@@ -45,9 +45,9 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = "arn:aws:codestar-connections:us-east-1:563539093289:connection/804203dc-6978-4a51-a29e-7aa51c170be8"
-        FullRepositoryId = "pozniakoo/trening"
-        BranchName       = "main"
+        ConnectionArn    = "" #Enter your CodeStar connection ARN
+        FullRepositoryId = "" #Enter your Repository path
+        BranchName       = "" #Enter your Dev branch name
       }
     }
   }
