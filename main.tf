@@ -38,7 +38,7 @@ resource "aws_db_instance" "wordpress-db" {
   engine_version         = "5.7"
   instance_class         = "db.t3.micro"
   username               = "admin"
-  password               = "adminroot"
+  password               = var.dbpass
   parameter_group_name   = "default.mysql5.7"
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.mysql.id]
