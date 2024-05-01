@@ -21,7 +21,7 @@ resource "aws_codestarconnections_connection" "connection" {
 }
 
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "pozniakoo-cicd-bucket12"
+  bucket        = "" #Enter your dev bucket name
   force_destroy = true
 }
 
@@ -33,8 +33,8 @@ resource "aws_s3_bucket_ownership_controls" "s3own" {
 }
 
 resource "aws_s3_bucket_acl" "codepipeline_bucket_acl" {
-  bucket = aws_s3_bucket.codepipeline_bucket.id
-  acl    = "private"
+  bucket     = aws_s3_bucket.codepipeline_bucket.id
+  acl        = "private"
   depends_on = [aws_s3_bucket_ownership_controls.s3own]
 }
 
@@ -47,7 +47,7 @@ resource "aws_instance" "ec2" {
   subnet_id                   = aws_subnet.public_subnets.id
   vpc_security_group_ids      = [aws_security_group.http-sg.id, aws_security_group.allow_ssh.id]
   key_name                    = "tfkey"
-  iam_instance_profile = aws_iam_instance_profile.ec2_iamprofile.name
+  iam_instance_profile        = aws_iam_instance_profile.ec2_iamprofile.name
 
   tags = {
     Name = "EC2 for CD"

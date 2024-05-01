@@ -14,8 +14,6 @@ resource "aws_codedeploy_deployment_group" "cdtfgroup" {
       value = "EC2 for CD"
     }
   }
-
-
 }
 
 resource "aws_codestarconnections_connection" "cscon" {
@@ -64,7 +62,7 @@ resource "aws_codepipeline" "codepipeline" {
       input_artifacts = ["source_output"]
 
       configuration = {
-        ApplicationName = "CDApp"
+        ApplicationName     = "CDApp"
         DeploymentGroupName = "CDDDeploymentGroup"
       }
     }

@@ -1,8 +1,3 @@
-The objective of this project is to modifying a web page dynamically in response to an uploaded file in a GitHub repository
-If you intend to run this code on your own, please remember to fill in your own variables for CodeStar connection and S3 bucket.
+Project: Basic CI/CD Pipeline 
 
-Stack:
-- CodePipeline
-- CodeDeploy
-- IAM
-- S3
+In this project, I've set up a fundamental CI/CD pipeline, demonstrating the dynamic modification of a web page triggered by an uploaded file in a GitHub repository. Leveraging CodePipeline and CodeDeploy, this pipeline showcases the seamless integration of code changes into the deployment process.
