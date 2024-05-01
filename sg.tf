@@ -29,7 +29,6 @@ resource "aws_security_group" "http-sg" {
   }
 }
 
-
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "Allow ssh inbound traffic"

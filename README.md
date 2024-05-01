@@ -1,7 +1,3 @@
-The objective of this project is to create basic environment for web server and install wordpress on it.
+Project: Basic Wordpress Deployment on EC2 instance 
 
-Stack: 
-- EC2 instance
-- Basic VPC components
-- Security Groups
-- Linux
+This project involves the deployment of a simple WordPress setup on an EC2 instance, leveraging Linux as the operating system and MySQL as the database backend. By establishing this basic configuration, it provides a solid foundation for WordPress hosting on AWS infrastructure.

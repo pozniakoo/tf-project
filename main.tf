@@ -13,7 +13,6 @@ provider "aws" {
   secret_key = var.secret_key
 }
 
-
 resource "aws_instance" "wordpress" {
   count                       = length(var.public_subnet_cidrs)
   ami                         = var.ami
