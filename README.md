@@ -1,6 +1,3 @@
-The objective of this project is to create automation responsible for starting & stopping EC2 instance based on schedule.
+Project: Automation of Starting & Stopping EC2 Instances based on schedule
 
-Stack:
-- CloudWatch Events
-- Lambda
-- Python
+In this project, I've automated the start and stop actions for EC2 instances, all according to a set schedule. Leveraging the power of CloudWatch Events, Lambda functions, and Python scripts, the process is seamlessly orchestrated.
