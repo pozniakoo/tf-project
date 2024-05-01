@@ -1,8 +1,8 @@
-The objective of this project is to provision Wordpress server in more advanced, secure and scalable way.
+Project: Advanced Wordpress Deployment
 
-Stack:
-- EC2
-- Security Groups
-- VPC 
-- Application Load Balancer
-- RDS
+In this project, I've elevated the WordPress deployment by integrating an Application Load Balancer for efficient traffic distribution and harnessing Amazon RDS to enhance performance and scalability. This advanced setup ensures optimal resource utilization and robustness of the WordPress infrastructure.
+
+
+
+
+
