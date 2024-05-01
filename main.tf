@@ -42,76 +42,48 @@ resource "aws_dynamodb_table_item" "views" {
 }
 
 resource "aws_s3_bucket" "webapp-bucket" {
-  bucket = "szymon12345-webapp-bucket"
+  bucket = var.bucket
 }
 
 
 resource "aws_s3_object" "webapp-object" {
   for_each = fileset("webapp/", "*")
 
-  bucket = aws_s3_bucket.webapp-bucket.id
-  key    = each.value
-  source = "webapp/${each.value}"
-  etag   = filemd5("webapp/${each.value}")
-  depends_on = [local_file.script]
-  content_type = each.value == "style.css" ? "text/css" : each.value == "script.js" ? "application/javascript" : each.value == "index.html" ? "text/html" : "application/octet-stream"
+  bucket       = aws_s3_bucket.webapp-bucket.id
+  key          = each.value
+  source       = "webapp/${each.value}"
+  depends_on   = [local_file.webapp_files]
+  content_type = each.value == "style.css" ? "text/css" : each.value == "script.js" ? "application/javascript" : each.value == "index.html" ? "text/html" : each.value == "login.html" ? "text/html" : each.value == "logout.html" ? "text/html" : each.value == "image.jpg" ? "image/jpeg" : "application/octet-stream"
 }
 
 
-
-resource "aws_s3_bucket_policy" "cloudfront_s3_bucket_policy" {
-  bucket = aws_s3_bucket.webapp-bucket.id
-  policy = jsonencode({
-    Version = "2008-10-17"
-    Id      = "PolicyForCloudFrontPrivateContent"
-    Statement = [
-      {
-        Sid    = "AllowCloudFrontServicePrincipal"
-        Effect = "Allow"
-        Principal = {
-          Service = "cloudfront.amazonaws.com"
-        }
-        Action   = "s3:GetObject"
-        Resource = "${aws_s3_bucket.webapp-bucket.arn}/*"
-        Condition = {
-          StringEquals = {
-            "AWS:SourceArn" = "${aws_cloudfront_distribution.s3_distribution.arn}"
-          }
-        }
-      }
-    ]
-  })
-}
-
-data "template_file" "script_js" {
-  template = "${file("${path.module}/script.js.tpl")}"
+data "template_file" "webapp_files" {
+  for_each = toset(var.webapp_files)
+  template = file("${path.module}/templates/${each.key}.tpl")
 
   vars = {
-    lambda_url = aws_lambda_function_url.test_live.function_url
+    lambda_url = aws_lambda_function_url.app-url.function_url
+    login_url  = "https://${var.cogdomain}.auth.${var.region}.amazoncognito.com/login?client_id=${aws_cognito_user_pool_client.pool-client.id}&response_type=code&scope=email+openid+profile&redirect_uri=https%3A%2F%2F${var.greeting}%2Flogin.html"
+    logout_url = "https://${var.cogdomain}.auth.${var.region}.amazoncognito.com/logout?client_id=${aws_cognito_user_pool_client.pool-client.id}&logout_uri=https%3A%2F%2F${var.greeting}%2Flogout.html"
   }
 }
 
-/*resource "aws_s3_object" "script" {
-  bucket = aws_s3_bucket.webapp-bucket.id
-  key    = "script.js"
-  source = data.template_file.script_js.rendered
-
-  content_type = "application/javascript"
+resource "local_file" "webapp_files" {
+  for_each   = data.template_file.webapp_files
+  filename   = "${path.module}/webapp/${each.key}"
+  content    = each.value.rendered
+  depends_on = [null_resource.webapp_files]
 }
-*/
-resource "null_resource" "local_script" {
+
+resource "null_resource" "webapp_files" {
+  for_each = toset(var.webapp_files)
+
   triggers = {
-    script_exists = fileexists("${path.module}/webapp/script.js")
+    script_exists = fileexists("${path.module}/webapp/${each.key}")
   }
 }
 
-resource "local_file" "script" {
-  filename = "${path.module}/webapp/script.js"
-  content  = data.template_file.script_js.rendered
-  depends_on = [null_resource.local_script]
-}
-
-resource "aws_lambda_function" "stop-ec2" {
+resource "aws_lambda_function" "app-function" {
 
   filename      = "lambda-function.zip"
   function_name = "lambda-function"
@@ -151,19 +123,19 @@ resource "aws_iam_policy" "lambdapolicy" {
   description = "Policy for Lambda"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [{
-        "Effect": "Allow",
-        "Action": [
-          "dynamodb:BatchGetItem",
-          "dynamodb:GetItem",
-          "dynamodb:Query",
-          "dynamodb:Scan",
-          "dynamodb:BatchWriteItem",
-          "dynamodb:PutItem",
-          "dynamodb:UpdateItem"
-        ],
-        "Resource": "${aws_dynamodb_table.dynamo-table.arn}"
+    "Version" : "2012-10-17",
+    "Statement" : [{
+      "Effect" : "Allow",
+      "Action" : [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+      ],
+      "Resource" : "${aws_dynamodb_table.dynamo-table.arn}"
       }
     ]
   })
@@ -174,13 +146,13 @@ resource "aws_iam_role_policy_attachment" "lambda-attach" {
   policy_arn = aws_iam_policy.lambdapolicy.arn
 }
 
-resource "aws_lambda_function_url" "test_live" {
-  function_name      = aws_lambda_function.stop-ec2.function_name
+resource "aws_lambda_function_url" "app-url" {
+  function_name      = aws_lambda_function.app-function.function_name
   authorization_type = "NONE"
 
   cors {
     allow_credentials = true
-    allow_origins     = ["https://greeting.${var.adres}"]
+    allow_origins     = ["https://${var.greeting}"]
     allow_methods     = ["*"]
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]
@@ -188,10 +160,3 @@ resource "aws_lambda_function_url" "test_live" {
   }
 }
 
-output "Lambda-URL" {
-  value = aws_lambda_function_url.test_live.function_url
-}
-#allow_origins     = ["https://${aws_s3_bucket.webapp-bucket.bucket_regional_domain_name}"]
-
-
-#aws_cloudfront_distribution.s3_distribution.alterna

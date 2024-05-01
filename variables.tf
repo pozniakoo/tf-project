@@ -4,13 +4,11 @@ variable "region" {
 }
 
 variable "access_key" {
-  type    = string
-  default = ""
+  type = string
 }
 
 variable "secret_key" {
-  type    = string
-  default = ""
+  type = string
 }
 
 variable "azs" {
@@ -20,7 +18,27 @@ variable "azs" {
 }
 
 variable "adres" {
-  type = string
+  type        = string
   description = "URL Cloudfront"
-  default = "211125332397.realhandsonlabs.net"
+  default     = "########" #<< ENTER YOUR URL
+}
+
+variable "greeting" {
+  type        = string
+  description = "URL Cloudfront"
+  default     = "greeting.#########" #<< ENTER YOUR URL
+}
+
+variable "cogdomain" {
+  type        = string
+  description = "Cognito domain name"
+  default     = "project8-serverless-app"
+}
+
+variable "webapp_files" {
+  default     = ["script.js", "index.html", "login.html", "logout.html"]
+  description = "Webapp files"
+}
+variable "bucket" {
+  type = string
 }

@@ -13,7 +13,7 @@ locals {
   s3_origin_id = "myS3Origin"
 }
 
-resource "aws_cloudfront_distribution" "s3_distribution" {
+resource "aws_cloudfront_distribution" "serverless-app" {
   origin {
     domain_name              = aws_s3_bucket.webapp-bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.cloudoac.id
@@ -24,7 +24,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   default_root_object = "index.html"
 
 
-  aliases = ["greeting.${var.adres}"]
+  aliases = ["${var.greeting}"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -51,7 +51,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   restrictions {
     geo_restriction {
-      locations = []
+      locations        = []
       restriction_type = "none"
     }
   }
@@ -62,6 +62,30 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.cert.arn
-    ssl_support_method = "sni-only"
+    ssl_support_method  = "sni-only"
   }
+}
+
+resource "aws_s3_bucket_policy" "cloudfront_s3_bucket_policy" {
+  bucket = aws_s3_bucket.webapp-bucket.id
+  policy = jsonencode({
+    Version = "2008-10-17"
+    Id      = "PolicyForCloudFrontPrivateContent"
+    Statement = [
+      {
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.webapp-bucket.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = "${aws_cloudfront_distribution.serverless-app.arn}"
+          }
+        }
+      }
+    ]
+  })
 }
