@@ -16,11 +16,11 @@ provider "aws" {
 
 
 resource "aws_instance" "ec2instance" {
-  ami                         = var.ami
-  instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.public_subnet.id
-  vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
-  key_name                    = "tfkey"
+  ami                    = var.ami
+  instance_type          = var.instance_type
+  subnet_id              = aws_subnet.public_subnet.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+  key_name               = "tfkey"
 
   tags = {
     Name = "Main EC2 Instance"
@@ -44,11 +44,11 @@ resource "aws_ami_from_instance" "ec2ami" {
 }
 
 resource "aws_instance" "backup_instance" {
-  ami                         = aws_ami_from_instance.ec2ami.id
-  instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.public_subnet.id
-  vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
-  key_name                    = "tfkey"
+  ami                    = aws_ami_from_instance.ec2ami.id
+  instance_type          = var.instance_type
+  subnet_id              = aws_subnet.public_subnet.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+  key_name               = "tfkey"
 
   tags = {
     Name = "Backup EC2 Instance"

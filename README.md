@@ -1,6 +1,3 @@
-The objective of this project is to create an EC2 instance, package it as an AMI image, and then replicate the EC2 instance from this image.
+Project: Backing Up & Restoring EC2 Instances
 
-Stack:
-- EC2
-- Basic VPC components
-- Security groups
+This project focuses on establishing a comprehensive backup and restoration process for EC2 instances. By implementing robust procedures, it ensures data integrity and system resilience, thereby enhancing the reliability and continuity of EC2-based services.
