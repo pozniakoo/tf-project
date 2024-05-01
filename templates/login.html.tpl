@@ -17,15 +17,16 @@
 		</form>
 		<p id="greeting"></p>
 	</main>
-	<hr>
-	<div class="logowanie">
-		To unlock the full site, register or log in with Amazon Cognito
-	</div>
-	<div class="check">	
-		<a href="${login_url}">
-			<button id="submit-btn">Login</button>
-		</a>
-	</div>
+    <hr>
+    <div class="logowanie">
+		You successfully logged in. Please enjoy this great view
+    </div>
+	<div class="check"> 
+		<a href="${logout_url}">
+            <button id="submit-btn">Logout</button>
+        </a>
+    </div>
+    <image src="image.jpg" alt="Great view" class="center"></image>
 	<script src="script.js"></script>
 </body>
 </html>

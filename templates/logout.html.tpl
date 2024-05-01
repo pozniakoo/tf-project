@@ -19,9 +19,9 @@
 	</main>
 	<hr>
 	<div class="logowanie">
-		To unlock the full site, register or log in with Amazon Cognito
+		You successfully logged out.
 	</div>
-	<div class="check">	
+	<div class="check">
 		<a href="${login_url}">
 			<button id="submit-btn">Login</button>
 		</a>
