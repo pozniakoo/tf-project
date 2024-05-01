@@ -1,9 +1,3 @@
-The objective of this project is to create scalable web application using Auto Scaling Group
+Project: Autoscaling 
 
-Stack:
-- Application Load Balancer
-- Security Groups
-- VPC
-- Linux
-- Auto Scaling Group
-- CloudWatch Scaling Alarm
+In this project, I've configured autoscaling capabilities by harnessing CloudWatch scaling alarms, Auto Scaling Groups, and seamlessly integrating them with an Application Load Balancer. This setup ensures optimal resource utilization and enhances the scalability and reliability of the system.

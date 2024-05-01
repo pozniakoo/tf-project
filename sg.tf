@@ -12,9 +12,9 @@ resource "aws_security_group" "sg-ec2" {
   description = "SG for EC2 Instance"
 
   ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = -1
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
     cidr_blocks = ["10.0.0.0/16"]
   }
   ingress {
@@ -25,9 +25,9 @@ resource "aws_security_group" "sg-ec2" {
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -69,9 +69,9 @@ resource "aws_security_group" "alb-sg" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
     security_groups = [aws_security_group.sg-ec2.id]
   }
 
