@@ -79,7 +79,7 @@ resource "aws_codepipeline" "DevCodePipeline" {
       input_artifacts = ["source_output"]
 
       configuration = {
-        ApplicationName = "CodeDeployDevApp"
+        ApplicationName     = "CodeDeployDevApp"
         DeploymentGroupName = "CDDeployGroupForDEV"
       }
     }
@@ -128,7 +128,7 @@ resource "aws_codepipeline" "ProdCodePipeline" {
       input_artifacts = ["source_output"]
 
       configuration = {
-        ApplicationName = "CodeDeployProdApp"
+        ApplicationName     = "CodeDeployProdApp"
         DeploymentGroupName = "CDDeployGroupForProd"
       }
     }

@@ -1,10 +1,3 @@
-The infrastructure is segmented into Development and Production environments, relying on two branches within a repository. 
-The development branch is employed for testing purposes. Following the completion of tests, branches are merged, 
-subsequently triggering Production Pipeline and deploying the final version on Production EC2 instance.
-If you intend to run this code on your own, please remember to fill in your own variables for CodeStar connection and S3 bucket.
+Project: Realistic CI/CD Pipeline 
 
-Stack:
-- CodePipeline
-- CodeDeploy
-- IAM
-- S3
+This project focuses on the creation of a realistic CI/CD pipeline, meticulously designed to accommodate infrastructure segregation between Development and Production environments. By harnessing distinct branches within a repository for rigorous testing, the Production Pipeline is seamlessly activated upon the successful completion of these tests.

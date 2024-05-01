@@ -21,7 +21,7 @@ resource "aws_codestarconnections_connection" "connection" {
 }
 
 resource "aws_s3_bucket" "devbucket" {
-  bucket = "pozniakoo-cicd-devbucket"
+  bucket        = var.devbucket
   force_destroy = true
 
   tags = {
@@ -30,7 +30,7 @@ resource "aws_s3_bucket" "devbucket" {
 }
 
 resource "aws_s3_bucket" "prodbucket" {
-  bucket = "pozniakoo-cicd-prodbucket"
+  bucket        = var.prodbucket
   force_destroy = true
 
   tags = {
@@ -52,14 +52,14 @@ resource "aws_s3_bucket_ownership_controls" "s3prod_owner" {
 }
 
 resource "aws_s3_bucket_acl" "DevBucketACL" {
-  bucket = aws_s3_bucket.devbucket.id
-  acl    = "private"
+  bucket     = aws_s3_bucket.devbucket.id
+  acl        = "private"
   depends_on = [aws_s3_bucket_ownership_controls.s3dev_owner]
 }
 
 resource "aws_s3_bucket_acl" "ProdBucketACL" {
-  bucket = aws_s3_bucket.prodbucket.id
-  acl    = "private"
+  bucket     = aws_s3_bucket.prodbucket.id
+  acl        = "private"
   depends_on = [aws_s3_bucket_ownership_controls.s3prod_owner]
 }
 
@@ -72,7 +72,7 @@ resource "aws_instance" "dev_ec2" {
   subnet_id                   = aws_subnet.public_subnets.id
   vpc_security_group_ids      = [aws_security_group.http-sg.id, aws_security_group.allow_ssh.id]
   key_name                    = "tfkey"
-  iam_instance_profile = aws_iam_instance_profile.ec2_iamprofile.name
+  iam_instance_profile        = aws_iam_instance_profile.ec2_iamprofile.name
 
   tags = {
     Name = "EC2 Dev"
@@ -88,7 +88,7 @@ resource "aws_instance" "prod_ec2" {
   subnet_id                   = aws_subnet.public_subnets.id
   vpc_security_group_ids      = [aws_security_group.http-sg.id, aws_security_group.allow_ssh.id]
   key_name                    = "tfkey"
-  iam_instance_profile = aws_iam_instance_profile.ec2_iamprofile.name
+  iam_instance_profile        = aws_iam_instance_profile.ec2_iamprofile.name
 
   tags = {
     Name = "EC2 Prod"

@@ -32,11 +32,16 @@ variable "instance_type" {
 }
 
 variable "access_key" {
-  type    = string
-  default = ""
+  type = string
 }
 
 variable "secret_key" {
-  type    = string
-  default = ""
+  type = string
+}
+
+variable "devbucket" {
+  type = string
+}
+variable "prodbucket" {
+  type = string
 }
